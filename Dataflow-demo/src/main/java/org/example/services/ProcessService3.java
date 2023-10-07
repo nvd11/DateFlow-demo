@@ -105,7 +105,7 @@ public class ProcessService3 {
         @ProcessElement
         public void processElement(ProcessContext processContext){
             PubsubMessage msg = processContext.element();
-`
+
             String messageId = msg.getMessageId();
             log.info("msg id is: ".concat(messageId));
 
