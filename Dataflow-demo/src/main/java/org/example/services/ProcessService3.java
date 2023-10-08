@@ -49,6 +49,7 @@ public class ProcessService3 {
         options.setTempLocation("gs://jason-hsbc-dataflow/tmp");
         options.setSubnetwork("regions/europe-west1/subnetworks/subnet-1");
         options.setNumWorkers(1);
+        options.setStreaming(true);
         options.setDefaultWorkerLogLevel(DataflowWorkerLoggingOptions.Level.INFO);
         options.setNumberOfWorkerHarnessThreads(2);
 
@@ -79,7 +80,7 @@ public class ProcessService3 {
 
         combinedMsg.apply("Write to GCS", ParDo.of(new WriteToGCSFn(this.bucketName,this.projectId)));
 
-        // pipeline.run().waitUntilFinish();
+        //yupipeline.run().();
         pipeline.run();
 
         log.info("processing3... end!");
