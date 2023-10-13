@@ -2,9 +2,12 @@ package org.example.services;
 
 import java.lang.Double;
 
+import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
 import org.apache.beam.runners.direct.DirectRunner;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
+import org.apache.beam.sdk.options.Default;
+import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.DoFn;
@@ -14,22 +17,41 @@ public class Charter02 {
 
     private static final String CSV_HEADER = "Order_ID,Product,Quantity_Ordered,Price_Each,Order_Date,Purchase_Address";
 
+    public interface StoreSalesAvgOptions extends PipelineOptions {
+
+        @Description("Path of the file to read from")
+        @Default.String("gs://linkedin_learning_56/charter02/input/Walmart.csv" +
+                "")
+        String getInputFile();
+
+        void setInputFile(String value);
+
+        @Description("Path of the file to write to")
+        @Default.String("gs://linkedin_learning_56/charter02/output/")
+        String getOutput();
+
+        void setOutput(String value);
+    }
+
+
+
     public void process(String[] args) {
 
-        PipelineOptions options = PipelineOptionsFactory.fromArgs(args).create();
+        StoreSalesAvgOptions options = PipelineOptionsFactory.fromArgs(args).create().as(StoreSalesAvgOptions.class);
+
         //options.setRunner(DirectRunner.class);
 
         runProductDetails(options);
     }
 
-    static void runProductDetails(PipelineOptions options) {
+    static void runProductDetails(StoreSalesAvgOptions options) {
 
         Pipeline p = Pipeline.create(options);
 
-        p.apply("ReadLines", TextIO.read().from("gs://linkedin_learning_56/charter02/input/Sales_April_2019.csv"))
+        p.apply("ReadLines", TextIO.read().from(options.getInputFile()))
                 .apply(ParDo.of(new FilterHeaderFn(CSV_HEADER)))
                 .apply("ExtractSalesDetails", ParDo.of(new ExtractSalesDetailsFn()))
-                .apply("WriteSalesDetails", TextIO.write().to("gs://linkedin_learning_56/charter02/output/get_sales_details")
+                .apply("WriteSalesDetails", TextIO.write().to(options.getOutput())
                         .withNumShards(1) //without it the job will auto split shards
                         .withHeader("Product,Total_Price,Order_Date"));
 

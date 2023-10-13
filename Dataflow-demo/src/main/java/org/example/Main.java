@@ -26,7 +26,7 @@ public class Main {
         System.setProperty("https.proxyHost", "10.0.1.223");
         System.setProperty("https.proxyPort", "7890");
 
-        RunCharter02withDataflow();
+        new Charter02().process(args);
     }
 
 
