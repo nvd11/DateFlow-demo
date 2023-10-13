@@ -2,6 +2,7 @@ package org.example.services;
 
 import java.lang.Double;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
 import org.apache.beam.runners.direct.DirectRunner;
 import org.apache.beam.sdk.Pipeline;
@@ -13,6 +14,7 @@ import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 
+@Slf4j
 public class Charter02 {
 
     private static final String CSV_HEADER = "Order_ID,Product,Quantity_Ordered,Price_Each,Order_Date,Purchase_Address";
@@ -37,7 +39,7 @@ public class Charter02 {
 
     public void process(String[] args) {
 
-        StoreSalesAvgOptions options = PipelineOptionsFactory.fromArgs(args).create().as(StoreSalesAvgOptions.class);
+        StoreSalesAvgOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().as(StoreSalesAvgOptions.class);
 
         //options.setRunner(DirectRunner.class);
 
@@ -55,7 +57,7 @@ public class Charter02 {
                         .withNumShards(1) //without it the job will auto split shards
                         .withHeader("Product,Total_Price,Order_Date"));
 
-        p.run().waitUntilFinish();
+        p.run();
     }
 
     private static class FilterHeaderFn extends DoFn<String, String> {
@@ -70,6 +72,7 @@ public class Charter02 {
         @ProcessElement
         public void processElement(ProcessContext c) {
             String row = c.element();
+            log.info("processing FilterHeaderFn..".concat(row.toString().substring(1,10)));
 
             if (!row.isEmpty() && !row.equals(this.header)) {
                 c.output(row);
@@ -81,8 +84,8 @@ public class Charter02 {
 
         @ProcessElement
         public void processElement(@Element String element, OutputReceiver<String> receiver) {
-
             String[] field = element.split(",");
+            log.info("processing ExtractSalesDetailsFn..");
 
             String productDetails = field[1] + "," +
                     Double.toString(Integer.parseInt(field[2]) * Double.parseDouble(field[3])) + "," +  field[4];

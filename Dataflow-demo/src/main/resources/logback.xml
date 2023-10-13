@@ -13,5 +13,5 @@
     </root>
 
     <!-- 设置 Apache Beam 相关日志记录器的级别为 WARN -->
-    <logger name="org.apache.beam" level="WARN" />
+    <logger name="org.apache.beam" level="INFO" />
 </configuration>

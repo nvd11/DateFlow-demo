@@ -18,7 +18,6 @@ public class Main {
 
 
     public static void main(String[] args) {
-        System.out.println("Hello world!");
         log.info("main()...");
 
         System.setProperty("http.proxyHost", "10.0.1.223");
