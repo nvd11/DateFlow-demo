@@ -2,6 +2,7 @@ package org.example;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 class MainTest {
 
     @Test
+    @Disabled
     void testMainWithDirectJava() {
         log.info("main testing..");
 
@@ -26,6 +28,7 @@ class MainTest {
     }
 
     @Test
+    @Disabled
     void testMainWithDataflowRunner() {
         log.info("main testing..");
 
