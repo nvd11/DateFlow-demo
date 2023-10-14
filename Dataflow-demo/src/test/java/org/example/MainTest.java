@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +15,7 @@ class MainTest {
 
     @Test
     @Disabled
-    void testMainWithDirectJava() {
+    void testMainWithDirectJava() throws UnknownHostException {
         log.info("main testing..");
 
         List<String> list= Arrays.asList(
@@ -29,7 +30,7 @@ class MainTest {
 
     @Test
     @Disabled
-    void testMainWithDataflowRunner() {
+    void testMainWithDataflowRunner() throws UnknownHostException {
         log.info("main testing..");
 
 
