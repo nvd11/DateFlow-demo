@@ -6,6 +6,8 @@ import org.example.services.ProcessService2;
 import org.example.services.ProcessService;
 import org.example.services.ProcessService3;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,13 +19,19 @@ public class Main {
     private static String region = "europe-west1";
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException {
         log.info("main()...");
 
-        System.setProperty("http.proxyHost", "10.0.1.223");
-        System.setProperty("http.proxyPort", "7887");
-        System.setProperty("https.proxyHost", "10.0.1.223");
-        System.setProperty("https.proxyPort", "7890");
+        InetAddress localHost = InetAddress.getLocalHost();
+        String hostname = localHost.getHostName();
+        log.info("current hostname is: ".concat(hostname));
+
+        if (!hostname.contains("gcp")){
+            System.setProperty("http.proxyHost", "10.0.1.223");
+            System.setProperty("http.proxyPort", "7887");
+            System.setProperty("https.proxyHost", "10.0.1.223");
+            System.setProperty("https.proxyPort", "7890");
+        }
 
         new Charter02().process(args);
     }
