@@ -38,10 +38,10 @@ class MainTest {
                 "--project=jason-hsbc",
                 "--inputFile=gs://linkedin_learning_56/charter02/input/Sales_April_2019.csv",
                 "--stagingLocation=gs://jason-hsbc-dataflow/staging/",
-                "--subnetwork=regions/europe-west1/subnetworks/subnet-1",
+                "--subnetwork=regions/europe-west2/subnetworks/subnet-west2",
                 "--tempLocation=gs://jason-hsbc-dataflow/tmp",
                 "--runner=DataflowRunner",
-                "--region=europe-west1"
+                "--region=europe-west2"
 
         );
         Main.main(list.toArray(new String[list.size()]));

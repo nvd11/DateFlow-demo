@@ -16,7 +16,7 @@ import java.util.List;
 public class Main {
 
     private static String project_id = "jason-hsbc";
-    private static String region = "europe-west1";
+    private static String region = "europe-west2";
 
 
     public static void main(String[] args) throws UnknownHostException {
@@ -49,7 +49,7 @@ public class Main {
         List<String> list = Arrays.asList(
                 "--project=".concat(project_id),
                 "--stagingLocation=gs://jason-hsbc-dataflow/staging/",
-                "--subnetwork=regions/europe-west1/subnetworks/subnet-1",
+                "--subnetwork=regions/europe-west2/subnetworks/subnet-west2",
                 "--tempLocation=gs://jason-hsbc-dataflow/tmp",
                 "--runner=DataflowRunner",
                 "--region=".concat(region)
