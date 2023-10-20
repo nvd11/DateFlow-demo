@@ -40,6 +40,7 @@ class MainTest {
                 "--stagingLocation=gs://jason-hsbc-dataflow/staging/",
                 "--subnetwork=regions/europe-west2/subnetworks/subnet-west2",
                 "--tempLocation=gs://jason-hsbc-dataflow/tmp",
+                // "--templateLocation=gs://jason-hsbc-dataflow/templates/template_test_template",
                 "--runner=DataflowRunner",
                 "--region=europe-west2"
 
