@@ -1,0 +1,14 @@
+org/example/services/ProcessService3$ExtractMessageAttributeFn.class
+org/example/services/Charter02$FilterHeaderFn.class
+org/example/Main.class
+org/example/services/ProcessService2$PubSubToGcsOptions.class
+org/example/services/ProcessService3.class
+org/example/services/ProcessService2.class
+org/example/services/Charter02.class
+org/example/services/Charter02$ExtractSalesDetailsFn.class
+org/example/services/ProcessService3$CombinedMessagesFn.class
+org/example/util/DateTimeUtil.class
+org/example/services/ProcessService$1.class
+org/example/services/ProcessService.class
+org/example/services/Charter02$StoreSalesAvgOptions.class
+org/example/services/ProcessService3$WriteToGCSFn.class
