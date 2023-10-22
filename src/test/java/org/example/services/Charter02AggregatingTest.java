@@ -29,7 +29,7 @@ class Charter02AggregatingTest {
 
     @Test
     void process() {
-        log.info("main testing..");
+        log.info("Charter02AggregatingTest testing..");
 
         List<String> list= Arrays.asList(
                 "--runner=DirectRunner",
