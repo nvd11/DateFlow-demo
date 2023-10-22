@@ -15,10 +15,8 @@ import org.apache.beam.sdk.values.PCollection;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.IntStream;
 
 import org.apache.commons.csv.CSVFormat;
@@ -76,7 +74,7 @@ public class FileToBQ {
 
         // Let the local machine also simulate single worker execution
         if (pipelineOptions.getRunner().equals(DirectRunner.class)) {
-            pipelineOptions.as(DirectOptions.class).setTargetParallelism(1);
+            // pipelineOptions.as(DirectOptions.class).setTargetParallelism(1);
         }
 
         // Create pipeline based on the options
@@ -142,9 +140,13 @@ public class FileToBQ {
 
         private final String tableName;
         private transient BigQuery bigQuery;
+        private transient List<Map<String, Object>> batchRows;
+        private final int batchSize = 20;
+        private final TableId table;
 
         public WriteToBQ(String tableName) {
             this.tableName = tableName;
+            table = TableId.of(BQ_PROJECT_ID, BQ_DS_ID, tableName);
         }
 
         /**
@@ -156,32 +158,45 @@ public class FileToBQ {
             // create BQ for every worker
             log.info("setting up bq client......!!!!!");
             bigQuery = BigQueryOptions.getDefaultInstance().getService();
+            batchRows = new Vector<>();
+
         }
 
         @ProcessElement
         public void processElement(@Element String row, OutputReceiver<String> receiver) {
             log.info("WriteToBQ - print some info3: content of this row is".concat(row));
-            // create table obj
-            TableId table = TableId.of(BQ_PROJECT_ID, BQ_DS_ID, this.tableName);
+            Map<String, Object> rowData = builtRowHashMap(row);
+            batchRows.add(rowData);
+            if (batchRows.size() >= batchSize) {
+                executeBatchInsert();
+            }
+        }
 
-            // create data insert request
+        private void executeBatchInsert() {
+            //TableId table = TableId.of(BQ_PROJECT_ID, BQ_DS_ID, tableName);
             InsertAllRequest.Builder requestBuilder = InsertAllRequest.newBuilder(table);
 
-            // add row
-            Map<String, Object> rowData = this.builtRowHashMap(row);
+            for (Map<String, Object> rowData : batchRows) {
+                requestBuilder.addRow(rowData);
+            }
 
-            requestBuilder.addRow(rowData);
-
-            // execute
             InsertAllResponse response = bigQuery.insertAll(requestBuilder.build());
 
-            // check result
             if (response.hasErrors()) {
+                // 处理插入错误
                 log.error("Error occurred while writing to BigQuery: " + response.getInsertErrors());
-                receiver.output("Error occurred while writing to BigQuery: " + response.getInsertErrors());
             } else {
-                log.info("Data row written to BigQuery successfully!");
-                receiver.output("Data row written to BigQuery successfully");
+                // 数据行成功写入
+                log.info("Data rows written to BigQuery successfully");
+            }
+
+            batchRows.clear();
+        }
+
+        @FinishBundle
+        public void finishBundle() {
+            if (!batchRows.isEmpty()) {
+                executeBatchInsert();
             }
         }
 
