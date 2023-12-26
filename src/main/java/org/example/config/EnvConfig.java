@@ -20,6 +20,8 @@ public class EnvConfig {
             System.setProperty("http.proxyPort", "7887");
             System.setProperty("https.proxyHost", "10.0.1.223");
             System.setProperty("https.proxyPort", "7890");
+            //System.setProperty("GOOGLE_APPLICATION_CREDENTIALS", "/home/gateman/keys/terraform-jason-hsbc-key.json");
+            //System.setProperty("GOOGLE_CLOUD_KEYFILE_JSON", "/home/gateman/keys/terraform-jason-hsbc-key.json");
         }
 
     }

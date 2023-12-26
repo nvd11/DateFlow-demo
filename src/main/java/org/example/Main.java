@@ -24,7 +24,9 @@ public class Main {
 
         EnvConfig.envSetup();
 
-        new Charter02().process(args);
+        RunCharter02withDirectRunner();
+
+        // new Charter02().process(args);
     }
 
 

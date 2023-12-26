@@ -22,7 +22,7 @@ public class Charter02 {
     public interface StoreSalesAvgOptions extends PipelineOptions {
 
         @Description("Path of the file to read from")
-        @Default.String("gs://linkedin_learning_56/charter02/input/Walmart.csv" +
+        @Default.String("gs://linkedin_learning_56/charter02/input/Sales_April_2019.csv" +
                 "")
         String getInputFile();
 
